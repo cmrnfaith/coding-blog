@@ -10,11 +10,9 @@ export function App() {
   useEffect(() => {
     let params = { eth_address: address }
 
-    axios
-      .get('https://jadu-web-api.herokuapp.com/api/coinbase', { params })
-      .then((response) => {
-        console.log(response)
-      })
+    axios.post('unitydl://mylink', { params }).then((response) => {
+      console.log(response)
+    })
   }, [address])
 
   return (
