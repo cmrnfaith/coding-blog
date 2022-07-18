@@ -1,85 +1,131 @@
-![Netlify Next.js Blog Template designed by Bejamas](github-banner.svg)
+<p>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/tmm/wagmi/main/.github/logo-dark.svg">
+    <img alt="wagmi logo" src="https://raw.githubusercontent.com/tmm/wagmi/main/.github/logo-light.svg" width="auto" height="60">
+  </picture>
+</p>
 
-[![Deploy to Netlify Button](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/netlify-templates/nextjs-blog-theme)
+React Hooks for Ethereum
 
-A customizable blog starter using:
+<p>
+  <a href="https://www.npmjs.com/package/wagmi">
+    <img src="https://img.shields.io/npm/v/wagmi?colorA=21262d&colorB=161b22&style=flat" alt="Version">
+  </a>
+  <a href="/LICENSE">
+    <img src="https://img.shields.io/npm/l/wagmi?colorA=21262d&colorB=161b22&style=flat" alt="License">
+  </a>
+  <a href="https://www.npmjs.com/package/wagmi">
+    <img src="https://img.shields.io/npm/dm/wagmi?colorA=21262d&colorB=161b22&style=flat" alt="Downloads per month">
+  </a>
+  <a href="https://bestofjs.org/projects/wagmi">
+    <img src="https://img.shields.io/endpoint?colorA=21262d&colorB=161b22&style=flat&url=https://bestofjs-serverless.now.sh/api/project-badge?fullName=tmm%2Fwagmi%26since=daily" alt="Best of JS">
+  </a>
+  <a href="https://github.com/sponsors/tmm?metadata_campaign=gh_readme_badge">
+    <img src="https://img.shields.io/github/sponsors/tmm?colorA=21262d&colorB=161b22&style=flat" alt="Sponsors">
+  </a>
+</p>
 
-- [Next.js](https://github.com/vercel/next.js) v12
-- [Tailwind](https://tailwindcss.com/) v3.0
-- Built-in [MDX](https://mdxjs.com/) v1 support
-- Includes modern design with dark & light themes
+## Features
 
-> 🎉 We’re really excited about the Bejamas + Netlify collaboration and we were going to celebrate it with some swag, but we realized we could put that money into supporting OSS and our ecosystem even more! After all, who needs another t-shirt or sticker?!
->
-> [Click this link](https://oss-form.netlify.app/) to vote for your favorite Open Source project!
+- 🚀 20+ hooks for working with wallets, ENS, contracts, transactions, signing, etc.
+- 💼 Built-in wallet connectors for MetaMask, WalletConnect, Coinbase Wallet, and Injected
+- 👟 Caching, request deduplication, multicall, batching, and persistence
+- 🌀 Auto-refresh data on wallet, block, and network changes
+- 🦄 TypeScript ready
+- 🌳 Test suite running against forked Ethereum network
 
-![Preview of blog theme. Author named Jay Doe and blog's name is "Next.js Blog Theme" with one blog post](nextjs-blog-theme-preview.png)
+...and a lot more.
 
-[Take a gander at the demo.](https://bejamas-nextjs-blog.netlify.app)
+## Documentation
 
-[Click here to watch the template walkthrough!](https://www.youtube.com/watch?v=63QZHs259dY)
+For full documentation and examples, visit [wagmi.sh](https://wagmi.sh).
 
-## Getting Started
+## Installation
 
----
+Install wagmi and its ethers peer dependency.
 
-You can get started with this project in two ways: locally or using the [setup wizard](https://nextjs-wizard.netlify.app/).
-
-### Setting Up Locally
-
-If you're doing it locally, start with clicking the [use this template](https://github.com/netlify-templates/nextjs-blog-theme/generate) button on GitHub. This will create a new repository with this template's files on your GitHub account. Once that is done, clone your new repository and navigate to it in your terminal.
-
-From there, you can install the project's dependencies by running:
-
-```shell
-yarn install
+```bash
+npm install wagmi ethers
 ```
 
-Finally, you can run your project locally with:
+## Quick Start
 
-```shell
-yarn run dev
+Connect a wallet in under 60 seconds. LFG.
+
+```tsx
+import { WagmiConfig, createClient } from 'wagmi'
+import { getDefaultProvider } from 'ethers'
+
+const client = createClient({
+  autoConnect: true,
+  provider: getDefaultProvider(),
+})
+
+function App() {
+  return (
+    <WagmiConfig client={client}>
+      <Profile />
+    </WagmiConfig>
+  )
+}
 ```
 
-Open your browser and visit <http://localhost:3000>, your project should be running!
+```tsx
+import { useAccount, useConnect, useDisconnect } from 'wagmi'
+import { InjectedConnector } from 'wagmi/connectors/injected'
 
-### Using the Setup Wizard
+function Profile() {
+  const { address } = useAccount()
+  const { connect } = useConnect({
+    connector: new InjectedConnector(),
+  })
+  const { disconnect } = useDisconnect()
 
-![Preview of Setup Wizard showing the initial page of a setup form](nextjs-setup-wizard.png)
+  if (address)
+    return (
+      <div>
+        Connected to {address}
+        <button onClick={() => disconnect()}>Disconnect</button>
+      </div>
+    )
+  return <button onClick={() => connect()}>Connect Wallet</button>
+}
+```
 
-Through the [setup wizard](https://nextjs-wizard.netlify.app/), you can create your blog in a few clicks and deploy to Netlify.
+In this example, we create a wagmi `Client` and pass it to the `WagmiConfig` React Context. The client is set up to use the ethers Default Provider and automatically connect to previously connected wallets.
 
-## Configuring the blog
+Next, we use the `useConnect` hook to connect an injected wallet (e.g. MetaMask) to the app. Finally, we show the connected account's address with `useAccount` and allow them to disconnect with `useDisconnect`.
 
-The config is based on environment variables to make it easy to integrate with any Jamstack platform, like Netlify.
+We've only scratched the surface for what you can do with wagmi!
 
-Here are the variables you can edit:
-| Variable | Description | Options
-| --- | --- | --- |
-| `BLOG_NAME` | the name of your blog, displayed below the avatar ||
-| `BLOG_TITLE` | the main header (`h1`) on the home page ||
-| `BLOG_FOOTER_TEXT`| the text in the footer ||
-| `BLOG_THEME` | the theme to pass to Tailwind | default |
-| `BLOG_FONT_HEADINGS` | the font-family for all HTML headings, from `h1` to `h6`| sans-serif (default), serif, monospace|
-| `BLOG_FONT_PARAGRAPHS` | the font-family for all other HTML elements | sans-serif (default), serif, monospace|
+## Community
 
-All of the env variables can be configured through the [Wizard](https://nextjs-wizard.netlify.app/) or through setting the project's environment variables. You can do this in your Netlify dashaboard (Site settings/Build & deploy/Environment/Environment variables).
+Check out the following places for more wagmi-related content:
 
-https://user-images.githubusercontent.com/3611928/153997545-6dcdeef0-e570-49e7-93d6-ce0d393d16c9.mp4
+- Join the [discussions on GitHub](https://github.com/tmm/wagmi/discussions)
+- Follow [@awkweb](https://twitter.com/awkweb) and [@wagmi_sh](https://twitter.com/wagmi_sh) on Twitter for project updates
+- Share [your project/organization](https://github.com/tmm/wagmi/discussions/201) using wagmi
+- Browse the [awesome-wagmi](https://github.com/tmm/awesome-wagmi) list of awesome projects and resources
 
-[alt: video walkthrough of editing env vars]
+## Support
 
-If setting an environment variable isn't your cup of tea, the defaults can be changed in [`utils/global-data.js`](/utils/global-data.js). You can also remove the variables and hard code blog information where these variables are used in the code base.
+If you find wagmi useful, please consider supporting development. Thank you 🙏
 
-- `BLOG_THEME, BLOG_FONT_HEADINGS, & BLOG_FONT_PARAGRAPHS` are used in [`tailwind-preset.js`](tailwind-preset.js)
-- `BLOG_NAME, BLOG_TITLE, BLOG_FOOTER_TEXT` are used in [`pages/index.js`](pages/index.js) & [`pages/posts/[slug].js`](pages/posts/[slug].js) through the `globalData` object.
+- [GitHub Sponsors](https://github.com/sponsors/tmm?metadata_campaign=gh_readme_support)
+- [Gitcoin Grant](https://gitcoin.co/grants/4493/wagmi-react-hooks-library-for-ethereum)
+- [awkweb.eth](https://etherscan.io/enslookup-search?search=awkweb.eth)
 
-## Adding new posts
+## Contributing
 
-All posts are stored in `/posts` directory. To make a new post, create a new file with the [`.mdx` extension](https://mdxjs.com/).
+If you're interested in contributing, please read the [contributing docs](/.github/CONTRIBUTING.md) **before submitting a pull request**.
 
-Since the posts are written in `MDX` format you can pass props and components. That means you can use [React components](https://reactjs.org/docs/components-and-props.html) inside your posts to make them more interactive. Learn more about how to do so in the [MDX docs on content](https://mdxjs.com/docs/using-mdx/#components).
+## Authors
 
-https://user-images.githubusercontent.com/3611928/152727802-102ec296-41c8-446d-93ed-922d11187073.mp4
+- awkweb.eth ([@awkweb](https://twitter.com/awkweb)) – [Mirror](https://mirror.xyz)
+- moxey.eth ([@jakemoxey](https://twitter.com/jakemoxey)) – [Rainbow](https://rainbow.me)
 
-[alt: video walkthrough of adding a new blog post]
+Thanks to julianhutton.eth ([@julianjhutton](https://twitter.com/julianjhutton)) for providing the awesome logo!
+
+## License
+
+[WAGMIT](/LICENSE) License
