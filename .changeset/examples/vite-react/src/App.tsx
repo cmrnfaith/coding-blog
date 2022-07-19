@@ -9,9 +9,8 @@ export function App() {
 
   useEffect(() => {
     console.log('test')
-    window.location.replace('unitydl://mylink')
 
-    window.location.replace('unitydl://mylink')
+    window.location.replace('unitydl://mylink/?address=' + address)
   }, [address])
 
   return (
