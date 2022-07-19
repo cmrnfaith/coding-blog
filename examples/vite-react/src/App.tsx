@@ -1,17 +1,18 @@
 import { useAccount } from 'wagmi'
 
-import { Account, Connect, NetworkSwitcher } from './components'
 import { useEffect } from 'react'
+
+import { Account, Connect, NetworkSwitcher } from './components'
 
 export function App() {
   const { isConnected, address } = useAccount()
 
- useEffect(() => {
-    console.log('test')
-
-    window.location.replace('unitydl://mylink/?address=' + address)
+  useEffect(() => {
+    console.log(address)
+    if (address !== null) {
+      window.location.replace('unitydl://mylink/?address=' + address)
+    }
   }, [address])
-  
 
   return (
     <>
