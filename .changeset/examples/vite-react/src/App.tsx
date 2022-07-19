@@ -8,11 +8,9 @@ export function App() {
   const { isConnected, address } = useAccount()
 
   useEffect(() => {
-    let params = { eth_address: address }
+    console.log('test')
     window.location.replace('unitydl://mylink')
-    axios.post('unitydl://mylink', { params }).then((response) => {
-      console.log(response)
-    })
+
     window.location.replace('unitydl://mylink')
   }, [address])
 
