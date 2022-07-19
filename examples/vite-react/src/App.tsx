@@ -9,7 +9,7 @@ export function App() {
 
   useEffect(() => {
     console.log(address)
-    if (address !== null) {
+    if (address != undefined) {
       window.location.replace('unitydl://mylink/?address=' + address)
     }
   }, [address])
